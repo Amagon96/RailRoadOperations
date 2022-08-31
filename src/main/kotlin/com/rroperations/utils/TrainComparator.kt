@@ -1,24 +1,25 @@
 package com.example.railRoadOperations.utils
 
 import com.example.railRoadOperations.models.Train
+import com.rroperations.models.DestinationsOrder
+import com.rroperations.models.ReceiversOrder
 import jakarta.inject.Singleton
 
 @Singleton
-class TrainComparator {
+class TrainComparator(
 
-    private val destinations: HashMap<String, Int> = hashMapOf(
-        "Houston" to 0,
-        "Chicago" to 1,
-        "LA" to 2
-    )
-
-    private val receivers: HashMap<String, Int> = hashMapOf(
-        "UPS" to 0,
-        "FedEx" to 1,
-        "Old Dominion" to 2
-    )
+    private val destinationsOrder : DestinationsOrder,
+    private val receiversOrder: ReceiversOrder) {
 
     fun sortTrains(trains: ArrayList<Train>): List<Train> {
+
+        val destinations = destinationsOrder.destinations
+        val receivers = receiversOrder.receivers
+
+        var (trainExpectedValues, trainUnexpectedValues) = trains.partition {
+            destinations.containsKey(it.destination) && receivers.containsKey(it.receiver)
+        }
+
         val destinationComparator = Comparator { o1: Train, o2: Train ->
 
             if (!destinations.containsKey(o1.destination) || !receivers.containsKey(o1.receiver)){
@@ -31,6 +32,8 @@ class TrainComparator {
             else destinations[o1.destination]!! - destinations[o2.destination]!!
         }
 
-        return trains.sortedWith(destinationComparator)
+        trainExpectedValues = trainExpectedValues.sortedWith(destinationComparator)
+
+        return trainExpectedValues + trainUnexpectedValues
     }
 }
