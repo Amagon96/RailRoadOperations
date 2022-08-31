@@ -1,7 +1,7 @@
 package com.example.railRoadOperations.models
 
 data class ClassificationTrack(
-        val classificationTrack: Number,
+        val classificationTrack: String,
         val nameOfCar: String,
         val destination: String,
         val receiver: String) {
