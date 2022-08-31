@@ -2,5 +2,5 @@ applicationType: default
 defaultPackage: com.rroperations
 testFramework: junit
 sourceLanguage: kotlin
-buildTool: maven
-features: [annotation-api, app-name, aws-v2-sdk, dynamodb, http-client, jackson-databind, junit, kotlin, kotlin-application, logback, maven, netty-server, readme, shade, yaml]
+buildTool: gradle_kotlin
+features: [annotation-api, app-name, gradle, http-client, jackson-databind, junit, kotlin, kotlin-application, kotlin-build, logback, micronaut-build, netty-server, readme, shade, yaml]
