@@ -5,3 +5,9 @@ netty:
   default:
     allocator:
       max-order: 3
+aws.region: us-east-1
+dynamodb:
+  table-name: 'books'
+dynamodb-local:
+  host: dynamodb-local
+  port: 8000

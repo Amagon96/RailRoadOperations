@@ -1,4 +1,4 @@
-FROM gradle:jammy
+docker FROM gradle:jammy
 WORKDIR /home/gradle/src
 EXPOSE 8080
 

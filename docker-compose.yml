@@ -10,6 +10,8 @@ services:
       - dynamodb-local
     volumes:
       - ./:/home/gradle/src
+    links:
+      - dynamodb-local
   
   dynamodb-local:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
