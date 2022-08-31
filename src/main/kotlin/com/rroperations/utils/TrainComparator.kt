@@ -1,6 +1,6 @@
-package com.example.railRoadOperations.utils
+package com.rroperations.utils
 
-import com.example.railRoadOperations.models.Train
+import com.rroperations.models.Train
 import jakarta.inject.Singleton
 
 @Singleton

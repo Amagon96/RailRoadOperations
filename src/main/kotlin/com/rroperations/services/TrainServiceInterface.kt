@@ -1,7 +1,7 @@
-package com.example.railRoadOperations.services
+package com.rroperations.services
 
-import com.example.railRoadOperations.models.ClassificationTrack
-import com.example.railRoadOperations.models.Train
+import com.rroperations.models.ClassificationTrack
+import com.rroperations.models.Train
 
 interface TrainServiceInterface {
     fun orderTrains(trains: ArrayList<Train>): List<ClassificationTrack>

@@ -1,4 +1,4 @@
-package com.example.railRoadOperations.models
+package com.rroperations.models
 
 data class Train(
         val nameOfCar: String,

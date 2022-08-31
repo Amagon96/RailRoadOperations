@@ -9,7 +9,6 @@ plugins {
 version = "0.1"
 group = "com.rroperations"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
@@ -49,7 +48,7 @@ tasks {
         }
     }
 }
-graalvmNative.toolchainDetection.set(false)
+graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
     testRuntime("junit5")

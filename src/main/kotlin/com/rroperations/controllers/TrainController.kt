@@ -1,8 +1,8 @@
-package com.example.railRoadOperations.controllers
+package com.rroperations.controllers
 
-import com.example.railRoadOperations.models.ClassificationTrack
-import com.example.railRoadOperations.models.Train
-import com.example.railRoadOperations.services.TrainServiceImpl
+import com.rroperations.models.ClassificationTrack
+import com.rroperations.models.Train
+import com.rroperations.services.TrainServiceImpl
 import io.micronaut.http.annotation.*
 import jakarta.inject.Inject
 
