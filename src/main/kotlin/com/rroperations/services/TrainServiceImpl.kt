@@ -1,8 +1,8 @@
-package com.example.railRoadOperations.services
+package com.rroperations.services
 
-import com.example.railRoadOperations.models.ClassificationTrack
-import com.example.railRoadOperations.models.Train
-import com.example.railRoadOperations.utils.TrainComparator
+import com.rroperations.models.ClassificationTrack
+import com.rroperations.models.Train
+import com.rroperations.utils.TrainComparator
 import com.rroperations.models.DestinationsOrder
 import com.rroperations.models.ReceiversOrder
 import jakarta.inject.Inject
