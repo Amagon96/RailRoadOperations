@@ -1,5 +1,16 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/gradle-app/dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - dynamodb-local
+    volumes:
+      - ./:/home/gradle/src
+  
   dynamodb-local:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
     image: "amazon/dynamodb-local:latest"

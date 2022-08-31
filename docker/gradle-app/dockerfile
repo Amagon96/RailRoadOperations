@@ -1,0 +1,9 @@
+FROM gradle:jammy
+WORKDIR /home/gradle/src
+EXPOSE 8080
+
+RUN apt-get update && apt-get install --yes unzip zip
+RUN curl -s https://get.sdkman.io | bash
+CMD /bin/bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install kotlin'
+
+ENTRYPOINT gradle run -t
