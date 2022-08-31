@@ -31,11 +31,11 @@ class TrainController {
     )
 
     private val classificationTracks: ArrayList<ClassificationTrack> = arrayListOf(
-        ClassificationTrack(1,"Box 1", "Houston", "UPS"),
-        ClassificationTrack(2, "Box 3", "Houston", "FedEx"),
-        ClassificationTrack(3, "Box 5", "Chicago", "UPS"),
-        ClassificationTrack(4, "Box 4", "Chicago", "Old Dominion"),
-        ClassificationTrack(5, "Box 2", "LA", "UPS")
+        ClassificationTrack("1","Box 1", "Houston", "UPS"),
+        ClassificationTrack("1", "Box 3", "Houston", "FedEx"),
+        ClassificationTrack("2", "Box 5", "Chicago", "UPS"),
+        ClassificationTrack("2", "Box 4", "Chicago", "Old Dominion"),
+        ClassificationTrack("3", "Box 2", "LA", "UPS")
     )
 
     @Test
