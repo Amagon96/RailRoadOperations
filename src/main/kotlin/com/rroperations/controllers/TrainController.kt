@@ -13,7 +13,7 @@ class TrainController {
     lateinit var trainServiceImpl: TrainServiceImpl
 
     @Post("/railroadoperations")
-    fun getTrains(@Body trains: ArrayList<Train>): List<ClassificationTrack> {
+    fun postTrains(@Body trains: ArrayList<Train>): List<ClassificationTrack> {
         return trainServiceImpl.orderTrains(trains)
     }
 }

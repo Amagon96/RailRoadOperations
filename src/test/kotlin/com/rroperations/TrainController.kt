@@ -39,10 +39,20 @@ class TrainController {
     )
 
     @Test
-    fun testHello() {
+    fun testPostTrains_ValidRequest() {
         val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations", trains)
         val body = client.toBlocking().retrieve(request)
         val serialized = mapper.writeValueAsString(classificationTracks)
+        assertNotNull(body)
+        assertEquals(serialized, body)
+    }
+
+    @Test
+    fun testPostTrains_NoBody() {
+        val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations",
+            emptyList<ClassificationTrack>())
+        val body = client.toBlocking().retrieve(request)
+        val serialized = mapper.writeValueAsString(emptyList<ClassificationTrack>())
         assertNotNull(body)
         assertEquals(serialized, body)
     }
