@@ -1,4 +1,4 @@
-package com.rroperations
+package com.rroperations.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rroperations.models.ClassificationTrack
@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test
 
 
 @MicronautTest
-class TrainController {
+class TrainControllerTest {
 
     @Inject
     @field:Client("/")
     lateinit var client : HttpClient
 
-    var mapper = ObjectMapper()
+    private var mapper = ObjectMapper()
 
     private val trains: ArrayList<Train> = arrayListOf(
         Train("Box 1", "Houston", "UPS"),
