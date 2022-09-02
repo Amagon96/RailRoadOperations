@@ -2,7 +2,7 @@ package com.rroperations.models
 
 import java.util.UUID
 
-data class Train(
+data class TrainCar(
         val nameOfCar: String,
         val destination: String,
         val receiver: String,
