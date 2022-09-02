@@ -1,8 +1,8 @@
 package com.rroperations.services
 
 import com.rroperations.models.ClassificationTrack
-import com.rroperations.models.Train
+import com.rroperations.models.TrainCar
 
 interface TrainServiceInterface {
-    fun orderTrains(trains: ArrayList<Train>): List<ClassificationTrack>
+    fun orderTrains(train: ArrayList<TrainCar>): List<ClassificationTrack>
 }

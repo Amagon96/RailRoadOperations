@@ -2,7 +2,7 @@ package com.rroperations
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rroperations.models.ClassificationTrack
-import com.rroperations.models.Train
+import com.rroperations.models.TrainCar
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
@@ -22,12 +22,12 @@ class TrainController {
 
     var mapper = ObjectMapper()
 
-    private val trains: ArrayList<Train> = arrayListOf(
-        Train("Box 1", "Houston", "UPS"),
-        Train("Box 2", "LA", "UPS"),
-        Train("Box 3", "Houston", "FedEx"),
-        Train("Box 4", "Chicago", "Old Dominion"),
-        Train("Box 5", "Chicago", "UPS")
+    private val train: ArrayList<TrainCar> = arrayListOf(
+        TrainCar("Box 1", "Houston", "UPS"),
+        TrainCar("Box 2", "LA", "UPS"),
+        TrainCar("Box 3", "Houston", "FedEx"),
+        TrainCar("Box 4", "Chicago", "Old Dominion"),
+        TrainCar("Box 5", "Chicago", "UPS")
     )
 
     private val classificationTracks: ArrayList<ClassificationTrack> = arrayListOf(
@@ -40,7 +40,7 @@ class TrainController {
 
     @Test
     fun testPostTrains_ValidRequest() {
-        val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations", trains)
+        val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations", train)
         val body = client.toBlocking().retrieve(request)
         val serialized = mapper.writeValueAsString(classificationTracks)
         assertNotNull(body)
