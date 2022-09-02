@@ -1,7 +1,7 @@
 package com.rroperations.services
 
 import com.rroperations.models.ClassificationTrack
-import com.rroperations.models.Train
+import com.rroperations.models.TrainCar
 import com.rroperations.utils.TrainComparator
 import com.rroperations.models.DestinationsOrder
 import com.rroperations.models.ReceiversOrder
@@ -16,21 +16,21 @@ class TrainServiceImpl(
     @Inject
     lateinit var comparator: TrainComparator
 
-    override fun orderTrains(trains: ArrayList<Train>): List<ClassificationTrack> {
+    override fun orderTrains(train: ArrayList<TrainCar>): List<ClassificationTrack> {
 
         val destinations = destinationsOrder.destinations
         val receivers = receiversOrder.receivers
 
         val response: ArrayList<ClassificationTrack> = ArrayList()
 
-        val trainsSorted = comparator.sortTrains(trains)
-        trainsSorted.map{ train ->
+        val trainsSorted = comparator.sortTrains(train)
+        trainsSorted.map{ trainCar ->
             val classificationTrack = ClassificationTrack(
-                if (destinations.containsKey(train.destination) && receivers.containsKey(train.receiver))
-                destinations[train.destination].toString() else "DLQ",
-                train.nameOfCar,
-                train.destination,
-                train.receiver)
+                if (destinations.containsKey(trainCar.destination) && receivers.containsKey(trainCar.receiver))
+                destinations[trainCar.destination].toString() else "DLQ",
+                trainCar.name,
+                trainCar.destination,
+                trainCar.receiver)
             response.add(classificationTrack)
         }
         println(response)

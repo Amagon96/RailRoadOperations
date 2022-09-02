@@ -1,6 +1,6 @@
 package com.rroperations.utils
 
-import com.rroperations.models.Train
+import com.rroperations.models.TrainCar
 import com.rroperations.models.DestinationsOrder
 import com.rroperations.models.ReceiversOrder
 import jakarta.inject.Singleton
@@ -11,16 +11,16 @@ class TrainComparator(
     private val destinationsOrder : DestinationsOrder,
     private val receiversOrder: ReceiversOrder) {
 
-    fun sortTrains(trains: ArrayList<Train>): List<Train> {
+    fun sortTrains(train: ArrayList<TrainCar>): List<TrainCar> {
 
         val destinations = destinationsOrder.destinations
         val receivers = receiversOrder.receivers
 
-        var (trainExpectedValues, trainUnexpectedValues) = trains.partition {
+        var (trainExpectedValues, trainUnexpectedValues) = train.partition {
             destinations.containsKey(it.destination) && receivers.containsKey(it.receiver)
         }
 
-        val destinationComparator = Comparator { o1: Train, o2: Train ->
+        val destinationComparator = Comparator { o1: TrainCar, o2: TrainCar ->
 
             if (!destinations.containsKey(o1.destination) || !receivers.containsKey(o1.receiver)){
                 return@Comparator 1
