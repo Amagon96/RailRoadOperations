@@ -1,7 +1,7 @@
 package com.rroperations.controllers
 
 import com.rroperations.models.ClassificationTrack
-import com.rroperations.models.Train
+import com.rroperations.models.TrainCar
 import com.rroperations.services.TrainServiceImpl
 import io.micronaut.http.annotation.*
 import jakarta.inject.Inject
@@ -13,7 +13,7 @@ class TrainController {
     lateinit var trainServiceImpl: TrainServiceImpl
 
     @Post("/railroadoperations")
-    fun postTrains(@Body trains: ArrayList<Train>): List<ClassificationTrack> {
-        return trainServiceImpl.orderTrains(trains)
+    fun postTrains(@Body train: ArrayList<TrainCar>): List<ClassificationTrack> {
+        return trainServiceImpl.orderTrains(train)
     }
 }
