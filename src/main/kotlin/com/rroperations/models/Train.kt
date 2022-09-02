@@ -7,9 +7,4 @@ data class Train(
         val destination: String,
         val receiver: String,
         var classificationTrack: String? = null,
-        var trainId: UUID? = null) {
-
-    override fun toString(): String {
-        return "Train(nameOfCar='$nameOfCar', destination='$destination', receiver='$receiver')"
-    }
-}
+        var trainId: UUID? = null)
