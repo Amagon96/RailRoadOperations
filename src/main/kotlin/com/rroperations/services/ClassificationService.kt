@@ -1,15 +1,11 @@
 package com.rroperations.services
 
-import com.rroperations.models.ReceiverEntity
 import com.rroperations.repositories.ClassificationRepository
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.*
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import software.amazon.awssdk.services.dynamodb.model.DescribeTableRequest
-import software.amazon.awssdk.services.dynamodb.model.QueryRequest
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
 import java.net.URI

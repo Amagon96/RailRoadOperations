@@ -3,11 +3,9 @@ package com.rroperations.models
 import io.micronaut.core.annotation.Introspected
 
 @Introspected
-class DestinationEntity
-    (
+class DestinationEntity(
     var name: String,
     var classification: Int,
-
 ){
     val type: String = "DESTINATION"
 

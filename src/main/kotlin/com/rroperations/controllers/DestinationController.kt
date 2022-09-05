@@ -1,26 +1,26 @@
 package com.rroperations.controllers
 
 import com.rroperations.models.DestinationEntity
-import com.rroperations.repositories.DestinationRepository
-import com.rroperations.services.DestinationService
+import com.rroperations.repositories.ClassificationRepository
+import com.rroperations.services.ClassificationService
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
 @Controller
-open class DestinationController() {
+open class DestinationController {
 
-    private val service = DestinationService("destinations")
+    private val service = ClassificationService("classifications")
 
     @Post("/destination")
     open fun save(@Valid @Body destination: DestinationEntity): DestinationEntity {
-        val clsEntity = DestinationRepository(UUID.randomUUID().toString(),destination.name, destination.classification, destination.type)
+        val clsEntity = ClassificationRepository(UUID.randomUUID().toString(),destination.name, destination.classification, destination.type)
         service.save(clsEntity)
         return destination
     }
 
     @Get("/destinations")
-    open fun findAll(): ArrayList<DestinationRepository> {
+    open fun findAll(): ArrayList<ClassificationRepository> {
         return service.getAll("DESTINATION")
     }
 
