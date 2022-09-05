@@ -1,7 +1,7 @@
 package com.rroperations.services
 
-import com.rroperations.models.Classification
-import com.rroperations.repositories.ClassificationRepository
+
+import com.rroperations.models.ReceiverModel
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
@@ -14,15 +14,17 @@ import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 import java.net.URI
 
 @Singleton
-class ClassificationService(private val tableName: String) {
+class ReceiverService {
     private val connection = dynamoDbTable()
+    private val type = "RECEIVER"
 
-    fun save(data: ClassificationRepository) {
-        connection.putItem(data)
+
+    fun save(data: ReceiverModel) {
+        return connection.putItem(data)
     }
 
-    fun getAll(type: String): ArrayList<ClassificationRepository> {
-        val classificationRepository = ArrayList<ClassificationRepository>()
+    fun getAll(): ArrayList<ReceiverModel> {
+        val classificationRepository = ArrayList<ReceiverModel>()
         val results = connection.scan().items().iterator()
         while (results.hasNext()) {
             val cResult = results.next()
@@ -33,7 +35,8 @@ class ClassificationService(private val tableName: String) {
         return classificationRepository
     }
 
-    fun findById(type: String, id: String): ClassificationRepository? {
+    //
+    fun findById(id: String): ReceiverModel? {
         return connection.getItem(
             Key.builder()
                 .partitionValue(type)
@@ -42,7 +45,7 @@ class ClassificationService(private val tableName: String) {
         )
     }
 
-    fun delete(type: String, id: String): ClassificationRepository {
+    fun delete(id: String): ReceiverModel {
         return connection.deleteItem(
             Key.builder()
                 .partitionValue(type)
@@ -51,16 +54,11 @@ class ClassificationService(private val tableName: String) {
         )
     }
 
-    fun update(classification: Classification): ClassificationRepository {
-//        val existingClassification: ClassificationRepository? = findById(type, id)
-//        if (existingClassification != null) {
-//            existingClassification.classification = classification
-//        }
-
-        return connection.updateItem(classification as ClassificationRepository)
+    fun update(receiver: ReceiverModel): ReceiverModel {
+        return connection.updateItem(receiver)
     }
 
-    private fun dynamoDbTable(): DynamoDbTable<ClassificationRepository> {
+    private fun dynamoDbTable(): DynamoDbTable<ReceiverModel> {
         val envRegion = System.getenv("AWS_REGION")
         val region = Region.of(envRegion)
 
@@ -74,7 +72,7 @@ class ClassificationService(private val tableName: String) {
             .build()
 
         val table = dynamoDbClientEnhancedClient
-            .table(tableName, TableSchema.fromBean(ClassificationRepository::class.java))
+            .table("Trains", TableSchema.fromBean(ReceiverModel::class.java))
 
 
         try {

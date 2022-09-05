@@ -6,12 +6,12 @@ import java.util.UUID
 @Introspected
 class ReceiverEntity
     (
-    override var name: String,
-    override var classification: Int,
-    override var id: UUID?
+     var name: String,
+     var classification: Int,
+     var id: UUID?
 
-): Classification{
-    override var type: String = "RECEIVER"
+){
+     var type: String = "RECEIVER"
 
     override fun toString(): String {
         return "Receiver(name='$name', classification='$classification')"
