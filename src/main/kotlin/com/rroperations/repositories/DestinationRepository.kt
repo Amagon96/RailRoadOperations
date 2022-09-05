@@ -6,7 +6,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 
 // type can only be "DESTINATION" or "RECEIVER"
 @DynamoDbBean
-data class ClassificationRepository (
+data class DestinationRepository (
     @get: DynamoDbSortKey var id: String? = null,
     var name: String? = null,
     var classification: Int? = -1,
