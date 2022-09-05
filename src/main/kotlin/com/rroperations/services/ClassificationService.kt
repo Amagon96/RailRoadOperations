@@ -1,5 +1,6 @@
 package com.rroperations.services
 
+import com.rroperations.models.Classification
 import com.rroperations.repositories.ClassificationRepository
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -8,7 +9,6 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.DescribeTableRequest
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
 import java.net.URI
@@ -18,7 +18,6 @@ class ClassificationService(private val tableName: String) {
     private val connection = dynamoDbTable()
 
     fun save(data: ClassificationRepository) {
-        println(data)
         connection.putItem(data)
     }
 
@@ -34,8 +33,31 @@ class ClassificationService(private val tableName: String) {
         return classificationRepository
     }
 
-    fun getSingle(type: String): ClassificationRepository {
-        return connection.getItem(Key.builder().partitionValue("fd").build())
+    fun findById(type: String, id: String): ClassificationRepository? {
+        return connection.getItem(
+            Key.builder()
+                .partitionValue(type)
+                .sortValue(id)
+                .build()
+        )
+    }
+
+    fun delete(type: String, id: String): ClassificationRepository {
+        return connection.deleteItem(
+            Key.builder()
+                .partitionValue(type)
+                .sortValue(id)
+                .build()
+        )
+    }
+
+    fun update(classification: Classification): ClassificationRepository {
+//        val existingClassification: ClassificationRepository? = findById(type, id)
+//        if (existingClassification != null) {
+//            existingClassification.classification = classification
+//        }
+
+        return connection.updateItem(classification as ClassificationRepository)
     }
 
     private fun dynamoDbTable(): DynamoDbTable<ClassificationRepository> {
@@ -60,11 +82,6 @@ class ClassificationService(private val tableName: String) {
         } catch (e: ResourceNotFoundException) {
             table.createTable()
         }
-
-//        val result = table.describeTable()
-//        if (!result) {
-//            table.createTable()
-//        }
 
         return table
     }
