@@ -10,7 +10,7 @@ import javax.validation.Valid
 @Controller
 open class ReceiverController() {
 
-    val service = ClassificationService("classification")
+    val service = ClassificationService("classifications")
 
     @Post("/receiver")
     open fun save(@Valid @Body receiver: ReceiverEntity): ReceiverEntity {
