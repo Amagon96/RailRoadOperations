@@ -5,31 +5,23 @@ import com.rroperations.services.ClassificationService
 import jakarta.inject.Singleton
 
 @Singleton
-class TrainComparator(
-    //private val destinationsOrder : DestinationsOrder,
-    //private val receiversOrder: ReceiversOrder
-) {
+class TrainComparator {
     private var destinationsOrder : HashMap<String, Int> = HashMap()
     private var receiversOrder : HashMap<String, Int> = HashMap()
     private val classificationService = ClassificationService("classifications")
-
-    private fun prepareDestinations() {
-        classificationService.getAll("DESTINATION").forEach { destination ->
-            destinationsOrder[destination.name!!] = destination.classification!!
-        }
-        println(destinationsOrder)
-    }
 
     private fun prepareClassification() {
         classificationService.getAll("RECEIVER").forEach { classification ->
             receiversOrder[classification.name!!] = classification.classification!!
         }
-        println(receiversOrder)
+
+        classificationService.getAll("DESTINATION").forEach { destination ->
+            destinationsOrder[destination.name!!] = destination.classification!!
+        }
     }
 
     fun sortTrains(train: ArrayList<TrainCar>): List<TrainCar> {
         prepareClassification()
-        prepareDestinations()
 
         val destinations = destinationsOrder.keys
         val receivers = receiversOrder.keys

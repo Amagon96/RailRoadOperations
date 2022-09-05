@@ -33,8 +33,6 @@ class TrainServiceImpl(
                 trainCar.receiver)
             response.add(classificationTrack)
         }
-        println(response)
-        println(trainsSorted)
 
         return response
     }
