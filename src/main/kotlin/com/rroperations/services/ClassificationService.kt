@@ -1,20 +1,20 @@
 package com.rroperations.services
 
-import com.rroperations.models.ReceiverEntity
 import com.rroperations.repositories.ClassificationRepository
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
-import software.amazon.awssdk.enhanced.dynamodb.Expression
+import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model.DescribeTableRequest
+import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
 import java.net.URI
 
 @Singleton
-class ClassificationService(private val tableName: String)
-{
+class ClassificationService(private val tableName: String) {
     private val connection = dynamoDbTable()
 
     fun save(data: ClassificationRepository) {
@@ -27,11 +27,15 @@ class ClassificationService(private val tableName: String)
         val results = connection.scan().items().iterator()
         while (results.hasNext()) {
             val cResult = results.next()
-            if (cResult.type==type) {
+            if (cResult.type == type) {
                 classificationRepository.add(cResult)
             }
         }
         return classificationRepository
+    }
+
+    fun getSingle(type: String): ClassificationRepository {
+        return connection.getItem(Key.builder().partitionValue("fd").build())
     }
 
     private fun dynamoDbTable(): DynamoDbTable<ClassificationRepository> {
@@ -50,11 +54,19 @@ class ClassificationService(private val tableName: String)
         val table = dynamoDbClientEnhancedClient
             .table(tableName, TableSchema.fromBean(ClassificationRepository::class.java))
 
-        val result = table.describeTable()
-        if (!result) {
+
+        try {
+            table.describeTable()
+        } catch (e: ResourceNotFoundException) {
             table.createTable()
         }
+
+//        val result = table.describeTable()
+//        if (!result) {
+//            table.createTable()
+//        }
 
         return table
     }
 }
+
