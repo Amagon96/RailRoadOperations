@@ -1,6 +1,5 @@
 package com.rroperations.controllers
 
-import com.rroperations.models.ClassificationTrack
 import com.rroperations.models.TrainCar
 import com.rroperations.services.TrainServiceImpl
 import io.micronaut.http.annotation.*
@@ -13,7 +12,7 @@ class TrainController {
     lateinit var trainServiceImpl: TrainServiceImpl
 
     @Post("/railroadoperations")
-    fun postTrains(@Body train: ArrayList<TrainCar>): List<ClassificationTrack> {
+    fun postTrains(@Body train: ArrayList<TrainCar>): List<TrainCar> {
         return trainServiceImpl.orderTrains(train)
     }
 }
