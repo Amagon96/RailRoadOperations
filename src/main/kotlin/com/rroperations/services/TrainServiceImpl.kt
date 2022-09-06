@@ -32,8 +32,6 @@ class TrainServiceImpl(
                     destinations[trainCar.destination].toString() else "DLQ")
             response.add(classificationTrack)
         }
-        println(response)
-        println(trainsSorted)
 
         return response
     }

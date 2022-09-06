@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "3860dbf1-9b0f-45e6-aaeb-087c52de9b54",
+		"name": "RailsRoadOperations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Receiver",
+			"item": [
+				{
+					"name": "http://localhost:8080/receiver",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Old Dominion\",\n    \"classification\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/receiver",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"receiver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/receivers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/receivers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"receivers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Destination",
+			"item": [
+				{
+					"name": "http://localhost:8080/destination",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Chicago\",\n    \"classification\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/destination",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"destination"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/destinations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/destinations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"destinations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "http://localhost:8080/trains/railroadoperations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n    \"name\": \"Box 1\",\n    \"destination\": \"Houston\",\n    \"receiver\": \"UPS\"\n}, {\n    \"name\": \"Box 2\",\n    \"destination\": \"LA\",\n    \"receiver\": \"FedEx\"\n}, {\n    \"name\": \"Box 3\",\n    \"destination\": \"Houston\",\n    \"receiver\": \"Old Dominion\"\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/trains/railroadoperations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"trains",
+						"railroadoperations"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
