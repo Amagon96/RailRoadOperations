@@ -5,12 +5,11 @@ import com.rroperations.models.DestinationModel
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
-import software.amazon.awssdk.enhanced.dynamodb.Expression
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
 import java.net.URI
@@ -26,19 +25,12 @@ class DestinationService {
     }
 
     fun getAll(): MutableList<DestinationModel> {
-        val filterExpression = Expression.builder()
-            .expression("#type = :type")
-            .expressionNames(mutableMapOf("#type" to "type"))
-            .expressionValues(
-                mutableMapOf(
-                    ":type" to AttributeValue.fromS(type)
-                )
+        val query: QueryConditional = QueryConditional
+            .keyEqualTo(
+                Key.builder().partitionValue(type).build()
             )
-            .build()
-
-        return connection.scan { requests ->
-            requests.filterExpression(filterExpression)
-        }.items().toMutableList()
+        return connection.query { request -> request.queryConditional(query) }
+            .items().toMutableList()
     }
 
     fun findById(id: String): DestinationModel? {
