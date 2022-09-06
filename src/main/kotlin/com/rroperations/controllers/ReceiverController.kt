@@ -8,12 +8,7 @@ import java.util.UUID
 import javax.validation.Valid
 
 @Controller("receiver")
- open class ReceiverController {
-
-    private val service: ReceiverService
-    constructor(service: ReceiverService) {
-        this.service = service
-    }
+ open class ReceiverController(private val service: ReceiverService) {
 
     @Post()
     open fun save(@Valid @Body receiver: ReceiverModel) {
@@ -22,7 +17,7 @@ import javax.validation.Valid
     }
 
     @Get()
-    open fun findAll(): ArrayList<ReceiverModel> {
+    open fun findAll(): MutableList<ReceiverModel> {
         return service.getAll()
     }
 

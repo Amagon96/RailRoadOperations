@@ -5,10 +5,12 @@ import com.rroperations.models.ReceiverModel
 import jakarta.inject.Singleton
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
+import software.amazon.awssdk.enhanced.dynamodb.Expression
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
 import java.net.URI
@@ -23,19 +25,22 @@ class ReceiverService {
         return connection.putItem(data)
     }
 
-    fun getAll(): ArrayList<ReceiverModel> {
-        val classificationRepository = ArrayList<ReceiverModel>()
-        val results = connection.scan().items().iterator()
-        while (results.hasNext()) {
-            val cResult = results.next()
-            if (cResult.type == type) {
-                classificationRepository.add(cResult)
-            }
-        }
-        return classificationRepository
+    fun getAll(): MutableList<ReceiverModel> {
+        val filterExpression = Expression.builder()
+            .expression("#type = :type")
+            .expressionNames(mutableMapOf("#type" to "type"))
+            .expressionValues(
+                mutableMapOf(
+                    ":type" to AttributeValue.fromS(type)
+                )
+            )
+            .build()
+
+        return connection.scan { requests ->
+            requests.filterExpression(filterExpression)
+        }.items().toMutableList()
     }
 
-    //
     fun findById(id: String): ReceiverModel? {
         return connection.getItem(
             Key.builder()
@@ -84,4 +89,5 @@ class ReceiverService {
         return table
     }
 }
+
 
