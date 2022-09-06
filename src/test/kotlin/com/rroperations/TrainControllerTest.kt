@@ -1,7 +1,6 @@
 package com.rroperations
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.rroperations.models.ClassificationTrack
 import com.rroperations.models.TrainCar
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
@@ -14,13 +13,13 @@ import org.junit.jupiter.api.Test
 
 
 @MicronautTest
-class TrainController {
+class TrainControllerTest {
 
     @Inject
     @field:Client("/")
     lateinit var client : HttpClient
 
-    var mapper = ObjectMapper()
+    private var mapper = ObjectMapper()
 
     private val train: ArrayList<TrainCar> = arrayListOf(
         TrainCar("Box 1", "Houston", "UPS"),
@@ -30,19 +29,19 @@ class TrainController {
         TrainCar("Box 5", "Chicago", "UPS")
     )
 
-    private val classificationTracks: ArrayList<ClassificationTrack> = arrayListOf(
-        ClassificationTrack("1","Box 1", "Houston", "UPS"),
-        ClassificationTrack("1", "Box 3", "Houston", "FedEx"),
-        ClassificationTrack("2", "Box 5", "Chicago", "UPS"),
-        ClassificationTrack("2", "Box 4", "Chicago", "Old Dominion"),
-        ClassificationTrack("3", "Box 2", "LA", "UPS")
+    private val processedTrain: ArrayList<TrainCar> = arrayListOf(
+        TrainCar("Box 1", "Houston", "UPS", "1"),
+        TrainCar( "Box 3", "Houston", "FedEx","1"),
+        TrainCar( "Box 5", "Chicago", "UPS","2"),
+        TrainCar( "Box 4", "Chicago", "Old Dominion","2"),
+        TrainCar( "Box 2", "LA", "UPS","3")
     )
 
     @Test
     fun testPostTrains_ValidRequest() {
         val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations", train)
         val body = client.toBlocking().retrieve(request)
-        val serialized = mapper.writeValueAsString(classificationTracks)
+        val serialized = mapper.writeValueAsString(processedTrain)
         assertNotNull(body)
         assertEquals(serialized, body)
     }
@@ -50,9 +49,9 @@ class TrainController {
     @Test
     fun testPostTrains_NoBody() {
         val request: HttpRequest<Any> = HttpRequest.POST("trains/railroadoperations",
-            emptyList<ClassificationTrack>())
+            emptyList<TrainCar>())
         val body = client.toBlocking().retrieve(request)
-        val serialized = mapper.writeValueAsString(emptyList<ClassificationTrack>())
+        val serialized = mapper.writeValueAsString(emptyList<TrainCar>())
         assertNotNull(body)
         assertEquals(serialized, body)
     }
