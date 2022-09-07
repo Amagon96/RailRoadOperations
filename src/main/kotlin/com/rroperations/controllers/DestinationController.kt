@@ -1,40 +1,39 @@
 package com.rroperations.controllers
 
-import com.rroperations.models.DestinationEntity
-import com.rroperations.repositories.ClassificationRepository
-import com.rroperations.services.ClassificationService
+import com.rroperations.models.DestinationModel
+import com.rroperations.services.DestinationService
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
-@Controller
-open class DestinationController {
+@Controller("destination")
+open class DestinationController(private val service: DestinationService) {
 
-    private val service = ClassificationService("classifications")
-
-    @Post("/destination")
-    open fun save(@Valid @Body destination: DestinationEntity): DestinationEntity {
-        val clsEntity = ClassificationRepository(UUID.randomUUID().toString(),destination.name, destination.classification, destination.type)
-        service.save(clsEntity)
+    @Post()
+    open fun save(@Valid @Body destination: DestinationModel): DestinationModel {
+        destination.id = UUID.randomUUID().toString()
+        service.save(destination)
         return destination
     }
 
-    @Get("/destinations")
-    open fun findAll(): ArrayList<ClassificationRepository> {
-        return service.getAll("DESTINATION")
+    @Get()
+    open fun findAll(): MutableList<DestinationModel> {
+        return service.getAll()
     }
 
-//    @Get("/receiver/{name}")
-//    open fun findOne(name: String): ReceiverEntity? {
-//        val receiverTable: DynamoDbTable<ReceiverEntity> = dynamoDbTable()
-//        val key = Key.builder().partitionValue(AttributeValue.builder().s(name).build()).build()
-//        return receiverTable.getItem { r -> r.key(key) }
-//    }
-//
-//    @Delete("/receiver/{name}")
-//    open fun deleteOne(name: String): ReceiverEntity? {
-//        val receiverTable: DynamoDbTable<ReceiverEntity> = dynamoDbTable()
-//        val key = Key.builder().partitionValue(AttributeValue.builder().s(name).build()).build()
-//        return receiverTable.deleteItem { r -> r.key(key) }
-//    }
+    @Get("/{id}")
+    open fun findById(id: String): DestinationModel? {
+        return service.findById(id)
+    }
+
+    @Delete("/{id}")
+    open fun delete(id: String): DestinationModel {
+        return service.delete(id)
+    }
+
+    @Put("/{id}")
+    open fun update(id: String, @Body destination: DestinationModel): DestinationModel {
+        destination.id = id
+        return service.update(destination)
+    }
 }

@@ -1,40 +1,39 @@
 package com.rroperations.controllers
 
-import com.rroperations.models.ReceiverEntity
-import com.rroperations.repositories.ClassificationRepository
-import com.rroperations.services.ClassificationService
+import com.rroperations.models.ReceiverModel
+import com.rroperations.services.ReceiverService
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
-@Controller
-open class ReceiverController() {
+@Controller("receiver")
+open class ReceiverController(private val service: ReceiverService) {
 
-    val service = ClassificationService("classifications")
-
-    @Post("/receiver")
-    open fun save(@Valid @Body receiver: ReceiverEntity): ReceiverEntity {
-        var clsEntity = ClassificationRepository(UUID.randomUUID().toString(),receiver.name, receiver.classification, receiver.type)
-        service.save(clsEntity)
+    @Post()
+    open fun save(@Valid @Body receiver: ReceiverModel): ReceiverModel {
+        receiver.id = UUID.randomUUID().toString()
+        service.save(receiver)
         return receiver
     }
 
-    @Get("/receivers")
-    open fun findAll(): ArrayList<ClassificationRepository> {
-        return service.getAll("RECEIVER")
+    @Get()
+    open fun findAll(): MutableList<ReceiverModel> {
+        return service.getAll()
     }
-//
-//    @Get("/receiver/{name}")
-//    open fun findOne(name: String): ReceiverEntity? {
-//        val receiverTable: DynamoDbTable<ReceiverEntity> = dynamoDbTable()
-//        val key = Key.builder().partitionValue(AttributeValue.builder().s(name).build()).build()
-//        return receiverTable.getItem { r -> r.key(key) }
-//    }
-//
-//    @Delete("/receiver/{name}")
-//    open fun deleteOne(name: String): ReceiverEntity? {
-//        val receiverTable: DynamoDbTable<ReceiverEntity> = dynamoDbTable()
-//        val key = Key.builder().partitionValue(AttributeValue.builder().s(name).build()).build()
-//        return receiverTable.deleteItem { r -> r.key(key) }
-//    }
+
+    @Get("/{id}")
+    open fun findById(id: String): ReceiverModel? {
+        return service.findById(id)
+    }
+
+    @Delete("/{id}")
+    open fun delete(id: String): ReceiverModel {
+        return service.delete(id)
+    }
+
+    @Put("/{id}")
+    open fun update(id: String, @Body receiver: ReceiverModel): ReceiverModel {
+        receiver.id = id
+        return service.update(receiver)
+    }
 }
