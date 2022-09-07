@@ -14,7 +14,7 @@ services:
       AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
       AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
       AWS_REGION: 'eu-west-1'
-      DYNAMO_DB_TABLE_NAME: 'Trains'
+      DYNAMO_DB_TABLE_NAME: 'classifications'
       DYNAMO_ENDPOINT: 'http://dynamodb-local:8000'
       MICRONAUT_ENVIRONMENTS: 'development'
     links:

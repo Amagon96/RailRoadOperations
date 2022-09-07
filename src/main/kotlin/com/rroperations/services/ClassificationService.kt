@@ -2,17 +2,15 @@ package com.rroperations.services
 
 import com.rroperations.repositories.ClassificationRepository
 import jakarta.inject.Singleton
+import java.net.URI
 import software.amazon.awssdk.enhanced.dynamodb.*
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
-import java.net.URI
-
 @Singleton
-class ClassificationService(private val tableName: String)
-{
+class ClassificationService() {
     private val connection = dynamoDbTable()
 
     fun save(data: ClassificationRepository) {
@@ -25,7 +23,7 @@ class ClassificationService(private val tableName: String)
         val results = connection.scan().items().iterator()
         while (results.hasNext()) {
             val cResult = results.next()
-            if (cResult.type==type) {
+            if (cResult.type == type) {
                 classificationRepository.add(cResult)
             }
         }
@@ -44,8 +42,7 @@ class ClassificationService(private val tableName: String)
 
     fun existsTable(connection: DynamoDbTable<ClassificationRepository>): Boolean {
         return try {
-            connection.describeTable(
-            )
+            connection.describeTable()
             true
         } catch (e: ResourceNotFoundException) {
             false
@@ -56,17 +53,20 @@ class ClassificationService(private val tableName: String)
         val envRegion = System.getenv("AWS_REGION")
         val region = Region.of(envRegion)
 
-        val dynamoDbClient = DynamoDbClient.builder()
-            .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
-            .region(region)
-            .build()
+        val dynamoDbClient =
+                DynamoDbClient.builder()
+                        .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
+                        .region(region)
+                        .build()
 
-        val dynamoDbClientEnhancedClient = DynamoDbEnhancedClient.builder()
-            .dynamoDbClient(dynamoDbClient)
-            .build()
+        val dynamoDbClientEnhancedClient =
+                DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build()
 
-        val table = dynamoDbClientEnhancedClient
-            .table(tableName, TableSchema.fromBean(ClassificationRepository::class.java))
+        val table =
+                dynamoDbClientEnhancedClient.table(
+                        System.getenv("DYNAMO_DB_TABLE_NAME"),
+                        TableSchema.fromBean(ClassificationRepository::class.java)
+                )
 
         if (!existsTable(table)) {
             table.createTable()

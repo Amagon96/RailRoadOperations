@@ -1,8 +1,8 @@
 package com.rroperations.services
 
-
 import com.rroperations.models.DestinationModel
 import jakarta.inject.Singleton
+import java.net.URI
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
@@ -12,43 +12,30 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException
 
-import java.net.URI
-
 @Singleton
 class DestinationService {
     private val connection = dynamoDbTable()
     private val type = "DESTINATION"
-
 
     fun save(data: DestinationModel) {
         return connection.putItem(data)
     }
 
     fun getAll(): MutableList<DestinationModel> {
-        val query: QueryConditional = QueryConditional
-            .keyEqualTo(
-                Key.builder().partitionValue(type).build()
-            )
-        return connection.query { request -> request.queryConditional(query) }
-            .items().toMutableList()
+        val query: QueryConditional =
+                QueryConditional.keyEqualTo(Key.builder().partitionValue(type).build())
+        return connection
+                .query { request -> request.queryConditional(query) }
+                .items()
+                .toMutableList()
     }
 
     fun findById(id: String): DestinationModel? {
-        return connection.getItem(
-            Key.builder()
-                .partitionValue(type)
-                .sortValue(id)
-                .build()
-        )
+        return connection.getItem(Key.builder().partitionValue(type).sortValue(id).build())
     }
 
     fun delete(id: String): DestinationModel {
-        return connection.deleteItem(
-            Key.builder()
-                .partitionValue(type)
-                .sortValue(id)
-                .build()
-        )
+        return connection.deleteItem(Key.builder().partitionValue(type).sortValue(id).build())
     }
 
     fun update(receiver: DestinationModel): DestinationModel {
@@ -59,18 +46,20 @@ class DestinationService {
         val envRegion = System.getenv("AWS_REGION")
         val region = Region.of(envRegion)
 
-        val dynamoDbClient = DynamoDbClient.builder()
-            .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
-            .region(region)
-            .build()
+        val dynamoDbClient =
+                DynamoDbClient.builder()
+                        .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
+                        .region(region)
+                        .build()
 
-        val dynamoDbClientEnhancedClient = DynamoDbEnhancedClient.builder()
-            .dynamoDbClient(dynamoDbClient)
-            .build()
+        val dynamoDbClientEnhancedClient =
+                DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build()
 
-        val table = dynamoDbClientEnhancedClient
-            .table("Trains", TableSchema.fromBean(DestinationModel::class.java))
-
+        val table =
+                dynamoDbClientEnhancedClient.table(
+                        System.getenv("DYNAMO_DB_TABLE_NAME"),
+                        TableSchema.fromBean(DestinationModel::class.java)
+                )
 
         try {
             table.describeTable()
@@ -81,5 +70,3 @@ class DestinationService {
         return table
     }
 }
-
-
