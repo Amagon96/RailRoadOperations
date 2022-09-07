@@ -1,6 +1,13 @@
 micronaut:
   application:
     name: railRoadOperations
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - ^http:\/\/localhost:([0-9]{4})$
 netty:
   default:
     allocator:
