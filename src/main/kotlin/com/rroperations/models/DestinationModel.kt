@@ -6,8 +6,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 
 @DynamoDbBean
 data class DestinationModel(
-    @get: DynamoDbSortKey override var id: String? = null,
+    @get: DynamoDbSortKey
+    override var id: String? = null,
     override var name: String? = null,
     override var classification: Int? = -1,
-    @get: DynamoDbPartitionKey override var type: String = "DESTINATION"
-): Classification
+    @get: DynamoDbPartitionKey
+    override var type: String? = "DESTINATION"
+): Classification()
