@@ -37,7 +37,7 @@ class ClassificationService() {
         while (results.hasNext()) {
             classificationRepository.add(results.next())
         }
-        return classificationRepository
+        return ArrayList(classificationRepository.sortedBy { it.classification })
     }
 
     fun existsTable(connection: DynamoDbTable<ClassificationRepository>): Boolean {
