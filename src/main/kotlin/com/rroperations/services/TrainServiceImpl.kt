@@ -1,24 +1,25 @@
 package com.rroperations.services
 
-import com.rroperations.models.TrainCar
+import com.rroperations.models.*
 import com.rroperations.utils.TrainComparator
-import com.rroperations.models.DestinationsOrder
-import com.rroperations.models.ReceiversOrder
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 
 @Singleton
-class TrainServiceImpl(
-    private val destinationsOrder: DestinationsOrder,
-    private val receiversOrder: ReceiversOrder): TrainServiceInterface {
+class TrainServiceImpl: TrainServiceInterface {
+
+    private var destinationsOrder: HashMap<String, Int> = HashMap()
+    private var receiversOrder: HashMap<String, Int> = HashMap()
+    private val classificationService = ClassificationService()
 
     @Inject
     lateinit var comparator: TrainComparator
 
     override fun orderTrains(train: ArrayList<TrainCar>): List<TrainCar> {
+        prepareClassification()
 
-        val destinations = destinationsOrder.destinations
-        val receivers = receiversOrder.receivers
+        val destinations = destinationsOrder.keys
+        val receivers = receiversOrder.keys
 
         val response: ArrayList<TrainCar> = ArrayList()
 
@@ -28,12 +29,22 @@ class TrainServiceImpl(
                 trainCar.name,
                 trainCar.destination,
                 trainCar.receiver,
-                if (destinations.containsKey(trainCar.destination) && receivers.containsKey(trainCar.receiver))
-                    destinations[trainCar.destination].toString() else "DLQ")
+                if (destinations.contains(trainCar.destination) && receivers.contains(trainCar.receiver))
+                    destinationsOrder.getValue(trainCar.destination).toString() else "DLQ")
             response.add(classificationTrack)
         }
 
         return response
+    }
+
+    private fun prepareClassification() {
+        classificationService.getAll(FindReceiver()).forEach { classification ->
+            receiversOrder[classification.name!!] = classification.classification!!
+        }
+
+        classificationService.getAll(FindDestination()).forEach { destination ->
+            destinationsOrder[destination.name!!] = destination.classification!!
+        }
     }
 
 }
