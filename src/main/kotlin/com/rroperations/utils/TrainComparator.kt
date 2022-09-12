@@ -1,5 +1,7 @@
 package com.rroperations.utils
 
+import com.rroperations.models.FindDestination
+import com.rroperations.models.FindReceiver
 import com.rroperations.models.TrainCar
 import com.rroperations.services.ClassificationService
 import jakarta.inject.Singleton
@@ -11,11 +13,11 @@ class TrainComparator {
     private val classificationService = ClassificationService()
 
     private fun prepareClassification() {
-        classificationService.getAll("RECEIVER").forEach { classification ->
+        classificationService.getAll(FindReceiver()).forEach { classification ->
             receiversOrder[classification.name!!] = classification.classification!!
         }
 
-        classificationService.getAll("DESTINATION").forEach { destination ->
+        classificationService.getAll(FindDestination()).forEach { destination ->
             destinationsOrder[destination.name!!] = destination.classification!!
         }
     }

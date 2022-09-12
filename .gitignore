@@ -5,7 +5,6 @@ build/
 target/
 out/
 .micronaut/
-.idea
 *.iml
 *.ipr
 *.iws
@@ -14,3 +13,4 @@ out/
 .classpath
 .factorypath
 docker/dynamodb
+!.idea/codeStyles
