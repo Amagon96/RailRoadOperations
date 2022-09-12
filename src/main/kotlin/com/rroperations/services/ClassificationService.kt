@@ -23,26 +23,31 @@ class ClassificationService {
 
     fun getAll(findClassification: FindClassification): MutableList<Classification> {
         val query: QueryConditional =
-            QueryConditional.keyEqualTo(Key.builder().partitionValue(findClassification.type).build())
+                QueryConditional.keyEqualTo(
+                        Key.builder().partitionValue(findClassification.type).build()
+                )
         return connection
-            .query { request -> request.queryConditional(query) }
-            .items()
-            .toMutableList()
+                .query { request -> request.queryConditional(query) }
+                .items()
+                .sortedBy { it.classification }
+                .toMutableList()
     }
 
     fun findById(findClassification: FindClassification): Classification? {
         return connection.getItem(
-            Key.builder()
-                .partitionValue(findClassification.type)
-                .sortValue(findClassification.id).build()
+                Key.builder()
+                        .partitionValue(findClassification.type)
+                        .sortValue(findClassification.id)
+                        .build()
         )
     }
 
     fun delete(findClassification: FindClassification): Classification {
         return connection.deleteItem(
-            Key.builder()
-                .partitionValue(findClassification.type)
-                .sortValue(findClassification.id).build()
+                Key.builder()
+                        .partitionValue(findClassification.type)
+                        .sortValue(findClassification.id)
+                        .build()
         )
     }
 
@@ -55,19 +60,19 @@ class ClassificationService {
         val region = Region.of(envRegion)
 
         val dynamoDbClient =
-            DynamoDbClient.builder()
-                .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
-                .region(region)
-                .build()
+                DynamoDbClient.builder()
+                        .endpointOverride(URI(System.getenv("DYNAMO_ENDPOINT")))
+                        .region(region)
+                        .build()
 
         val dynamoDbClientEnhancedClient =
-            DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build()
+                DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build()
 
         val table =
-            dynamoDbClientEnhancedClient.table(
-                System.getenv("DYNAMO_DB_TABLE_NAME"),
-                TableSchema.fromBean(Classification::class.java)
-            )
+                dynamoDbClientEnhancedClient.table(
+                        System.getenv("DYNAMO_DB_TABLE_NAME"),
+                        TableSchema.fromBean(Classification::class.java)
+                )
 
         try {
             table.describeTable()
