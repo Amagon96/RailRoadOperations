@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.agorapulse:micronaut-amazon-awssdk-dynamodb:2.0.1-micronaut-3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.agorapulse/micronaut-amazon-awssdk-dynamodb/2.0.1-micronaut-3.0/b6dfbdcfb526dbdc696b3f099599ef0fa656bb4d/micronaut-amazon-awssdk-dynamodb-2.0.1-micronaut-3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.agorapulse/micronaut-amazon-awssdk-dynamodb/2.0.1-micronaut-3.0/5cce7ed8262cf4b2ac18e8f26b12ac3ee154b32d/micronaut-amazon-awssdk-dynamodb-2.0.1-micronaut-3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
