@@ -33,6 +33,11 @@ open class ReceiverController(private val service: ClassificationService) {
         return service.delete(FindReceiver(id))
     }
 
+    @Delete("/")
+    open fun deleteAll(): MutableList<Classification> {
+        return service.deleteAllByType(FindReceiver())
+    }
+
     @Put("/{id}")
     open fun update(id: String, @Body receiver: ReceiverModel): Classification {
         receiver.id = id
