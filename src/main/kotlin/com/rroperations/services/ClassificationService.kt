@@ -44,15 +44,6 @@ class ClassificationService {
         )
     }
 
-    fun findByName(classification: Classification): Classification? {
-        return connection.getItem(
-            Key.builder()
-                .partitionValue(classification.type)
-                .sortValue(classification.name)
-                .build()
-        )
-    }
-
     fun delete(findClassification: FindClassification): Classification {
         return connection.deleteItem(
             Key.builder()
@@ -70,7 +61,7 @@ class ClassificationService {
         } else {
             classifications.stream().forEach { classification ->  delete(FindReceiver(classification.id)) }
         }
-        
+
         return classifications
     }
 

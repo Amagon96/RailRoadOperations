@@ -5,6 +5,7 @@ import com.rroperations.models.DestinationModel
 import com.rroperations.models.FindDestination
 import com.rroperations.services.ClassificationService
 import com.rroperations.utils.ClassificationValidator
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
@@ -13,12 +14,15 @@ import javax.validation.Valid
 open class DestinationController(private val service: ClassificationService, private val validator: ClassificationValidator) {
 
     @Post()
-    open fun save(@Valid @Body destination: DestinationModel): Classification {
+    open fun save(@Valid @Body destination: DestinationModel): HttpResponse<Classification>? {
         destination.id = UUID.randomUUID().toString()
-        if (validator.validateSave(destination)) {
+
+        return if (validator.validateSave(destination) == null) {
             service.save(destination)
+            HttpResponse.created(destination)
+        } else {
+            HttpResponse.badRequest(destination)
         }
-        return destination
     }
 
     @Get()

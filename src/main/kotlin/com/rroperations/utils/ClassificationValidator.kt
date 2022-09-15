@@ -10,19 +10,20 @@ import jakarta.inject.Singleton
 @Singleton
 open class ClassificationValidator(private val service: ClassificationService) {
 
-    open fun validateSave(classification: Classification): Boolean {
+    open fun validateSave(classification: Classification): Classification? {
         return classificationExists(classification)
     }
 
-    open fun classificationExists(classification: Classification): Boolean {
-        val (classificationById, classificationByName) = Pair(
-            service.findById(if (classification.type === "DESTINATION")
-                FindDestination(classification.id) else
-                FindReceiver(classification.id)
-            )?.id,
-            service.findByName(classification)?.name
-        )
+    open fun classificationExists(classification: Classification): Classification? {
+        var exists: Classification? = null
+        val classifications = service.getAll(if (classification.type == "DESTINATION") FindDestination() else FindReceiver())
+        println("classifications: $classifications")
 
-        return classificationById == null && classificationByName == null
+        classifications.stream().forEach { c ->
+            if (c.classification == classification.classification || c.name == classification.name )
+                exists = c
+        }
+
+        return exists
     }
 }
