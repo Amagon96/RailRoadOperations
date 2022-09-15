@@ -48,7 +48,7 @@ open class ReceiverController(private val service: ClassificationService, privat
     @Put("/{id}")
     open fun update(id: String, @Body receiver: ReceiverModel): HttpResponse<Classification>? {
         receiver.id = id
-        return if (validator.validateUpdate(receiver)) {
+        return if (validator.validUpdate(receiver)) {
             service.update(receiver)
             HttpResponse.ok(receiver)
         } else {
