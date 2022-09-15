@@ -46,8 +46,13 @@ open class DestinationController(private val service: ClassificationService, pri
     }
 
     @Put("/{id}")
-    open fun update(id: String, @Body destination: DestinationModel): Classification {
+    open fun update(id: String, @Body destination: DestinationModel): HttpResponse<Classification>? {
         destination.id = id
-        return service.update(destination)
+        return if (validator.validateUpdate(destination)) {
+            service.update(destination)
+            HttpResponse.ok(destination)
+        } else {
+            HttpResponse.badRequest(destination)
+        }
     }
 }

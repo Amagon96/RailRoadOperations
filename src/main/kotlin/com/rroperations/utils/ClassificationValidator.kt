@@ -1,6 +1,7 @@
 package com.rroperations.utils
 
 import com.rroperations.models.Classification
+import com.rroperations.models.DestinationModel
 import com.rroperations.models.FindDestination
 import com.rroperations.models.FindReceiver
 
@@ -25,5 +26,13 @@ open class ClassificationValidator(private val service: ClassificationService) {
         }
 
         return exists
+    }
+
+    open fun validateUpdate(destination: DestinationModel): Boolean {
+        val classifications = service.getAll(if (destination.type == "DESTINATION") FindDestination(destination.id) else FindReceiver(destination.id))
+        val nameCount = classifications.stream().filter { c -> c.name == destination.name && c.id != destination.id }.count() == 0L
+        val orderCount = classifications.stream().filter { c -> c.classification == destination.classification && c.id != destination.id }.count() == 0L
+
+        return nameCount && orderCount
     }
 }
