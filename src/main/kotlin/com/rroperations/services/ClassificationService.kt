@@ -56,7 +56,7 @@ class ClassificationService {
     fun deleteAllByType(findClassification: FindClassification): MutableList<Classification> {
         val classifications = getAll(findClassification)
 
-        if (findClassification.type === "DESTINATIONS") {
+        if (findClassification.type == "DESTINATION") {
             classifications.stream().forEach { classification ->  delete(FindDestination(classification.id)) }
         } else {
             classifications.stream().forEach { classification ->  delete(FindReceiver(classification.id)) }

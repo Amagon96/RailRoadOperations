@@ -4,17 +4,24 @@ import com.rroperations.models.Classification
 import com.rroperations.models.FindReceiver
 import com.rroperations.models.ReceiverModel
 import com.rroperations.services.ClassificationService
+import com.rroperations.utils.ClassificationValidator
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
 @Controller("receiver")
-open class ReceiverController(private val service: ClassificationService) {
+open class ReceiverController(private val service: ClassificationService, private val validator: ClassificationValidator) {
 
     @Post()
     open fun save(@Valid @Body receiver: ReceiverModel): Classification {
         receiver.id = UUID.randomUUID().toString()
-        service.save(receiver)
+
+        if (validator.validateSave(receiver) == null) {
+            println("Saving")
+            service.save(receiver)
+        }
+        println("Not Saving")
         return receiver
     }
 
@@ -41,6 +48,12 @@ open class ReceiverController(private val service: ClassificationService) {
     @Put("/{id}")
     open fun update(id: String, @Body receiver: ReceiverModel): Classification {
         receiver.id = id
+        if (validator.validateUpdate(receiver)) {
+            service.update(receiver)
+            println("Updating")
+        }
+
+        println("Not updating")
         return service.update(receiver)
     }
 }

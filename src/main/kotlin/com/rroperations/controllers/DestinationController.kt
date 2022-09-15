@@ -41,7 +41,7 @@ open class DestinationController(private val service: ClassificationService, pri
     }
 
     @Delete("/")
-    open fun deleteAll(type: String): MutableList<Classification> {
+    open fun deleteAll(): MutableList<Classification> {
         return service.deleteAllByType(FindDestination())
     }
 
