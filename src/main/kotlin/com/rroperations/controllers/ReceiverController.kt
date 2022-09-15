@@ -14,15 +14,15 @@ import javax.validation.Valid
 open class ReceiverController(private val service: ClassificationService, private val validator: ClassificationValidator) {
 
     @Post()
-    open fun save(@Valid @Body receiver: ReceiverModel): Classification {
+    open fun save(@Valid @Body receiver: ReceiverModel): HttpResponse<Classification>?  {
         receiver.id = UUID.randomUUID().toString()
 
-        if (validator.validateSave(receiver) == null) {
-            println("Saving")
+        return if (validator.validateSave(receiver)) {
             service.save(receiver)
+            HttpResponse.created(receiver)
+        } else {
+            HttpResponse.badRequest(receiver)
         }
-        println("Not Saving")
-        return receiver
     }
 
     @Get()
@@ -46,14 +46,13 @@ open class ReceiverController(private val service: ClassificationService, privat
     }
 
     @Put("/{id}")
-    open fun update(id: String, @Body receiver: ReceiverModel): Classification {
+    open fun update(id: String, @Body receiver: ReceiverModel): HttpResponse<Classification>? {
         receiver.id = id
-        if (validator.validateUpdate(receiver)) {
+        return if (validator.validateUpdate(receiver)) {
             service.update(receiver)
-            println("Updating")
+            HttpResponse.ok(receiver)
+        } else {
+            HttpResponse.badRequest(receiver)
         }
-
-        println("Not updating")
-        return service.update(receiver)
     }
 }

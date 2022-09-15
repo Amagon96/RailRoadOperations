@@ -17,7 +17,7 @@ open class DestinationController(private val service: ClassificationService, pri
     open fun save(@Valid @Body destination: DestinationModel): HttpResponse<Classification>? {
         destination.id = UUID.randomUUID().toString()
 
-        return if (validator.validateSave(destination) == null) {
+        return if (validator.validateSave(destination)) {
             service.save(destination)
             HttpResponse.created(destination)
         } else {
