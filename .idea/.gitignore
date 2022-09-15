@@ -7,6 +7,9 @@
 /dataSources/
 /dataSources.local.xml
 
+/libraries
+/modules.xml
+
 /compiler.xml
 /gradle.xml
 /jarRepositories.xml
