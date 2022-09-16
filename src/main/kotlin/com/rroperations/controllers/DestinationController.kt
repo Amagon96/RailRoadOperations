@@ -4,18 +4,25 @@ import com.rroperations.models.Classification
 import com.rroperations.models.DestinationModel
 import com.rroperations.models.FindDestination
 import com.rroperations.services.ClassificationService
+import com.rroperations.utils.ClassificationValidator
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
 @Controller("destination")
-open class DestinationController(private val service: ClassificationService) {
+open class DestinationController(private val service: ClassificationService, private val validator: ClassificationValidator) {
 
     @Post()
-    open fun save(@Valid @Body destination: DestinationModel): Classification {
+    open fun save(@Valid @Body destination: DestinationModel): HttpResponse<Classification>? {
         destination.id = UUID.randomUUID().toString()
-        service.save(destination)
-        return destination
+
+        return if (validator.validateSave(destination)) {
+            service.save(destination)
+            HttpResponse.created(destination)
+        } else {
+            HttpResponse.badRequest(destination)
+        }
     }
 
     @Get()
@@ -33,9 +40,19 @@ open class DestinationController(private val service: ClassificationService) {
         return service.delete(FindDestination(id))
     }
 
+    @Delete("/")
+    open fun deleteAll(): MutableList<Classification> {
+        return service.deleteAllByType(FindDestination())
+    }
+
     @Put("/{id}")
-    open fun update(id: String, @Body destination: DestinationModel): Classification {
+    open fun update(id: String, @Body destination: DestinationModel): HttpResponse<Classification>? {
         destination.id = id
-        return service.update(destination)
+        return if (validator.validUpdate(destination)) {
+            service.update(destination)
+            HttpResponse.ok(destination)
+        } else {
+            HttpResponse.badRequest(destination)
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.rroperations.services
 
 import com.rroperations.models.Classification
 import com.rroperations.models.FindClassification
+import com.rroperations.models.FindDestination
+import com.rroperations.models.FindReceiver
 import jakarta.inject.Singleton
 import java.net.URI
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -35,20 +37,32 @@ class ClassificationService {
 
     fun findById(findClassification: FindClassification): Classification? {
         return connection.getItem(
-                Key.builder()
-                        .partitionValue(findClassification.type)
-                        .sortValue(findClassification.id)
-                        .build()
+            Key.builder()
+                .partitionValue(findClassification.type)
+                .sortValue(findClassification.id)
+                .build()
         )
     }
 
     fun delete(findClassification: FindClassification): Classification {
         return connection.deleteItem(
-                Key.builder()
-                        .partitionValue(findClassification.type)
-                        .sortValue(findClassification.id)
-                        .build()
+            Key.builder()
+                .partitionValue(findClassification.type)
+                .sortValue(findClassification.id)
+                .build()
         )
+    }
+
+    fun deleteAllByType(findClassification: FindClassification): MutableList<Classification> {
+        val classifications = getAll(findClassification)
+
+        if (findClassification.type == "DESTINATION") {
+            classifications.stream().forEach { classification ->  delete(FindDestination(classification.id)) }
+        } else {
+            classifications.stream().forEach { classification ->  delete(FindReceiver(classification.id)) }
+        }
+
+        return classifications
     }
 
     fun update(receiver: Classification): Classification {

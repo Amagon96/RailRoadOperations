@@ -4,18 +4,25 @@ import com.rroperations.models.Classification
 import com.rroperations.models.FindReceiver
 import com.rroperations.models.ReceiverModel
 import com.rroperations.services.ClassificationService
+import com.rroperations.utils.ClassificationValidator
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import java.util.UUID
 import javax.validation.Valid
 
 @Controller("receiver")
-open class ReceiverController(private val service: ClassificationService) {
+open class ReceiverController(private val service: ClassificationService, private val validator: ClassificationValidator) {
 
     @Post()
-    open fun save(@Valid @Body receiver: ReceiverModel): Classification {
+    open fun save(@Valid @Body receiver: ReceiverModel): HttpResponse<Classification>?  {
         receiver.id = UUID.randomUUID().toString()
-        service.save(receiver)
-        return receiver
+
+        return if (validator.validateSave(receiver)) {
+            service.save(receiver)
+            HttpResponse.created(receiver)
+        } else {
+            HttpResponse.badRequest(receiver)
+        }
     }
 
     @Get()
@@ -33,9 +40,19 @@ open class ReceiverController(private val service: ClassificationService) {
         return service.delete(FindReceiver(id))
     }
 
+    @Delete("/")
+    open fun deleteAll(): MutableList<Classification> {
+        return service.deleteAllByType(FindReceiver())
+    }
+
     @Put("/{id}")
-    open fun update(id: String, @Body receiver: ReceiverModel): Classification {
+    open fun update(id: String, @Body receiver: ReceiverModel): HttpResponse<Classification>? {
         receiver.id = id
-        return service.update(receiver)
+        return if (validator.validUpdate(receiver)) {
+            service.update(receiver)
+            HttpResponse.ok(receiver)
+        } else {
+            HttpResponse.badRequest(receiver)
+        }
     }
 }
